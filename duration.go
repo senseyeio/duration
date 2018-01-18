@@ -58,13 +58,10 @@ func ParseDuration(from string) (Duration, error) {
 		case "day":
 			d.D = val
 		case "hour":
-			//d.T = d.T + (time.Duration(val) * time.Hour)
 			d.TH = val
 		case "minute":
-			//d.T = d.T + (time.Duration(val) * time.Minute)
 			d.TM = val
 		case "second":
-			//d.T = d.T + (time.Duration(val) * time.Second)
 			d.TS = val
 		default:
 			return d, fmt.Errorf("unknown field %s", name)
