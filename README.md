@@ -1,7 +1,9 @@
-# ISO8601
+ISO8601
+=======
 Parse ISO8601 duration strings, and use to shift dates/times.
 
-### Basic Example
+Basic Example
+-------------
 
 	package main
 
