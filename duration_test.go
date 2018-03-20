@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"bitbucket.org/senseye/backend/scheduled-downtime/iso8601"
+	"github.com/senseyeio/iso8601"
 )
 
 const dateLayout = "Jan 2, 2006 at 03:04:05"
@@ -57,6 +57,26 @@ func TestCanShift(t *testing.T) {
 	}
 }
 
+func TestCanMaintainHourThroughDST(t *testing.T) {
+	loc, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	current, err := time.ParseInLocation(dateLayout, "Jan 1, 2018 at 00:00:00", loc)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	sut := iso8601.Duration{D: 1}
+	for d := 0; d < 365; d++ {
+		if got := current.Hour(); got != 0 {
+			t.Fatalf("Day %d: want=0, got=%d", d, got)
+		}
+		current = sut.Shift(current)
+	}
+}
+
 func TestCanParse(t *testing.T) {
 	cases := []struct {
 		from string
@@ -95,7 +115,7 @@ func TestCanRejectBadString(t *testing.T) {
 	for _, c := range cases {
 		_, err := iso8601.ParseDuration(c)
 		if err == nil {
-			t.Fatal("%s: Expected error, got none", c)
+			t.Fatalf("%s: Expected error, got none", c)
 		}
 	}
 }
