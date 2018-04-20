@@ -51,7 +51,16 @@ The code below repeatedly adds 24 hours to a `time.Time`. You might expect the t
 		}
 	}
 
-Caveats
+	// Outputs
+	// time.Add:15    Duration.Shift:15
+	// time.Add:15    Duration.Shift:15
+	// time.Add:15    Duration.Shift:15
+	// ...
+	// time.Add:16    Duration.Shift:15
+	// time.Add:16    Duration.Shift:15
+	// time.Add:16    Duration.Shift:15
+	// ...
+
 -------
 Months are tricky. Shifting by months uses `time.AddDate()`, which is great. However, be aware of how differing days in the month are accommodated. Dates will 'roll over' if the month you're shifting to has fewer days. e.g. if you start on Jan 30th and repeat every "P1M", you'll get this:
 
