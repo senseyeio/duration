@@ -1,4 +1,4 @@
-ISO8601 [![Build](https://travis-ci.org/senseyeio/iso8601.svg?branch=master)](https://travis-ci.org/senseyeio/iso8601) [![Go Report Card](https://goreportcard.com/badge/senseyeio/iso8601)](https://goreportcard.com/report/senseyeio/iso8601) [![GoDoc](https://godoc.org/github.com/senseyeio/iso8601?status.svg)](https://godoc.org/github.com/senseyeio/iso8601)
+ISO8601 [![Build](https://travis-ci.org/senseyeio/iso8601.svg?branch=master)](https://travis-ci.org/senseyeio/iso8601) [![Coverage](https://coveralls.io/repos/github/senseyeio/iso8601/badge.svg?branch=master)](https://coveralls.io/github/senseyeio/iso8601?branch=master) [![Go Report Card](https://goreportcard.com/badge/senseyeio/iso8601)](https://goreportcard.com/report/senseyeio/iso8601) [![GoDoc](https://godoc.org/github.com/senseyeio/iso8601?status.svg)](https://godoc.org/github.com/senseyeio/iso8601)
 =======
 Parse ISO8601 duration strings, and use to shift dates/times.
 
