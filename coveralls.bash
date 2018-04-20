@@ -18,12 +18,7 @@ then
 	exit 1
 fi
 
-go list ./... | grep -v '/examples/' | cut -d'/' -f 4- | while read d
-do
-	cd $d
-	go test -covermode count -coverprofile coverage.coverprofile
-	cd -
-done
+go test -covermode count -coverprofile coverage.coverprofile
 
 gover
 goveralls -coverprofile gover.coverprofile -service travis-ci -repotoken $COVERALLS_TOKEN
