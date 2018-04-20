@@ -1,4 +1,4 @@
-ISO8601
+ISO8601 [![Go Report Card](https://goreportcard.com/badge/senseyeio/iso8601)](https://goreportcard.com/report/senseyeio/iso8601)
 =======
 Parse ISO8601 duration strings, and use to shift dates/times.
 
