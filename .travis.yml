@@ -1,7 +1,12 @@
 language: go
 
+before_install:
+  - go get github.com/mattn/goveralls
+  - go get github.com/modocache/gover
+
 script:
   - go test -race -v ./...
+  - ./coveralls.bash
 
 go:
   - 1.9.x
