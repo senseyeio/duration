@@ -183,3 +183,21 @@ func TestCanUnmarshalJSON(t *testing.T) {
 		t.Fatalf("want=%+v, got=%+v", want, got)
 	}
 }
+
+func TestCanRejectDurationInJSON(t *testing.T) {
+	j := []byte(`"PZY"`)
+	var got duration.Duration
+	err := json.Unmarshal(j, &got)
+	if err == nil {
+		t.Fatal("expected error, got none")
+	}
+}
+
+func TestCanRejectBadJSON(t *testing.T) {
+	j := []byte(`{"foo":"bar"}`)
+	var got duration.Duration
+	err := json.Unmarshal(j, &got)
+	if err == nil {
+		t.Fatal("expected error, got none")
+	}
+}
