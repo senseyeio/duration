@@ -1,5 +1,5 @@
-// Package iso8601 handles ISO8601-formatted durations.
-package iso8601
+// Package duration handles ISO8601-formatted durations.
+package duration
 
 import (
 	"bytes"
@@ -27,8 +27,8 @@ type Duration struct {
 
 var pattern = regexp.MustCompile(`^P((?P<year>\d+)Y)?((?P<month>\d+)M)?((?P<week>\d+)W)?((?P<day>\d+)D)?(T((?P<hour>\d+)H)?((?P<minute>\d+)M)?((?P<second>\d+)S)?)?$`)
 
-// ParseDuration parses an ISO8601 duration string.
-func ParseDuration(from string) (Duration, error) {
+// ParseISO8601 parses an ISO8601 duration string.
+func ParseISO8601(from string) (Duration, error) {
 	var match []string
 	var d Duration
 
@@ -136,7 +136,7 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	tmp, err := ParseDuration(s)
+	tmp, err := ParseISO8601(s)
 	if err != nil {
 		return err
 	}
