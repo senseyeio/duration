@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	d, _ := iso8601.ParseISO8601("P1D")
+	d, _ := duration.ParseISO8601("P1D")
 	today := time.Now()
 	tomorrow := d.Shift(today)
 	fmt.Println(today.Format("Jan _2"))
