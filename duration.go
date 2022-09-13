@@ -15,14 +15,20 @@ import (
 // Duration represents an ISO8601 Duration
 // https://en.wikipedia.org/wiki/ISO_8601#Durations
 type Duration struct {
-	Y int
-	M int
-	W int
-	D int
-	// Time Component
-	TH int
-	TM int
-	TS int
+	// Y is the year designator that follows the value for the number of calendar years.
+	Y int64
+	// M is the month designator that follows the value for the number of calendar months.
+	M int64
+	// W is the week designator that follows the value for the number of weeks.
+	W int64
+	// D is the day designator that follows the value for the number of calendar days.
+	D int64
+	// TH is the hour designator that follows the value for the number of hours.
+	TH int64
+	// TM is the minute designator that follows the value for the number of minutes.
+	TM int64
+	// TS is the second designator that follows the value for the number of seconds.
+	TS int64
 }
 
 var pattern = regexp.MustCompile(`^P((?P<year>\d+)Y)?((?P<month>\d+)M)?((?P<week>\d+)W)?((?P<day>\d+)D)?(T((?P<hour>\d+)H)?((?P<minute>\d+)M)?((?P<second>\d+)S)?)?$`)
@@ -44,7 +50,7 @@ func ParseISO8601(from string) (Duration, error) {
 			continue
 		}
 
-		val, err := strconv.Atoi(part)
+		val, err := strconv.ParseInt(part, 10, 64)
 		if err != nil {
 			return d, err
 		}
@@ -92,7 +98,7 @@ func (d Duration) HasTimePart() bool {
 func (d Duration) Shift(t time.Time) time.Time {
 	if d.Y != 0 || d.M != 0 || d.W != 0 || d.D != 0 {
 		days := d.W*7 + d.D
-		t = t.AddDate(d.Y, d.M, days)
+		t = t.AddDate(int(d.Y), int(d.M), int(days))
 	}
 	t = t.Add(d.timeDuration())
 	return t
