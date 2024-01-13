@@ -201,3 +201,40 @@ func TestCanRejectBadJSON(t *testing.T) {
 		t.Fatal("expected error, got none")
 	}
 }
+
+func TestCanUnshift(t *testing.T) {
+	cases := []struct {
+		to       string
+		duration duration.Duration
+		want     string
+	}{
+		{"Jan 1, 2019 at 00:00:00", duration.Duration{Y: 1}, "Jan 1, 2018 at 00:00:00"},
+		{"Feb 1, 2018 at 00:00:00", duration.Duration{M: 1}, "Jan 1, 2018 at 00:00:00"},
+		{"Mar 1, 2018 at 00:00:00", duration.Duration{M: 2}, "Jan 1, 2018 at 00:00:00"},
+		{"Jan 8, 2018 at 00:00:00", duration.Duration{W: 1}, "Jan 1, 2018 at 00:00:00"},
+		{"Jan 2, 2018 at 00:00:00", duration.Duration{D: 1}, "Jan 1, 2018 at 00:00:00"},
+		{"Jan 1, 2018 at 01:00:00", duration.Duration{TH: 1}, "Jan 1, 2018 at 00:00:00"},
+		{"Jan 1, 2018 at 00:01:00", duration.Duration{TM: 1}, "Jan 1, 2018 at 00:00:00"},
+		{"Jan 1, 2018 at 00:00:01", duration.Duration{TS: 1}, "Jan 1, 2018 at 00:00:00"},
+		{"Jun 9, 2028 at 05:10:06", duration.Duration{
+			Y:  10,
+			M:  5,
+			D:  8,
+			TH: 5,
+			TM: 10,
+			TS: 6,
+		},
+			"Jan 1, 2018 at 00:00:00",
+		},
+	}
+
+	for k, c := range cases {
+		to := makeTime(t, c.to)
+		want := makeTime(t, c.want)
+
+		got := c.duration.UnShift(to)
+		if !want.Equal(got) {
+			t.Fatalf("Case %d: want=%s, got=%s", k, want, got)
+		}
+	}
+}
