@@ -232,7 +232,7 @@ func TestCanUnshift(t *testing.T) {
 		to := makeTime(t, c.to)
 		want := makeTime(t, c.want)
 
-		got := c.duration.UnShift(to)
+		got := c.duration.Unshift(to)
 		if !want.Equal(got) {
 			t.Fatalf("Case %d: want=%s, got=%s", k, want, got)
 		}

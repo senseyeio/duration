@@ -106,7 +106,7 @@ func (d Duration) Shift(t time.Time) time.Time {
 // roll over, e.g. Oct 1 - P1M = Aug 31.
 //
 // Week and Day values will be combined as W*7 + D.
-func (d Duration) UnShift(t time.Time) time.Time {
+func (d Duration) Unshift(t time.Time) time.Time {
 	if d.Y != 0 || d.M != 0 || d.W != 0 || d.D != 0 {
 		days := d.W*7 + d.D
 		t = t.AddDate(-d.Y, -d.M, -days)
