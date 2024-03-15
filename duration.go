@@ -98,6 +98,23 @@ func (d Duration) Shift(t time.Time) time.Time {
 	return t
 }
 
+// UnShift returns a time.Time, shifted back by the duration from the given start.
+//
+// NB: UnShift uses time.AddDate for years, months, weeks, and days, and so
+// shares its limitations. In particular, shifting back by months is not recommended
+// unless the start date is before the 28th of the month. Otherwise, dates will
+// roll over, e.g. Oct 1 - P1M = Aug 31.
+//
+// Week and Day values will be combined as W*7 + D.
+func (d Duration) Unshift(t time.Time) time.Time {
+	if d.Y != 0 || d.M != 0 || d.W != 0 || d.D != 0 {
+		days := d.W*7 + d.D
+		t = t.AddDate(-d.Y, -d.M, -days)
+	}
+	t = t.Add(-d.timeDuration())
+	return t
+}
+
 func (d Duration) timeDuration() time.Duration {
 	var dur time.Duration
 	dur = dur + (time.Duration(d.TH) * time.Hour)
