@@ -1,9 +1,8 @@
-Duration [![Build](https://travis-ci.org/senseyeio/duration.svg?branch=master)](https://travis-ci.org/senseyeio/duration) [![Coverage](https://coveralls.io/repos/github/senseyeio/duration/badge.svg?branch=master)](https://coveralls.io/github/senseyeio/duration?branch=master) [![Go Report Card](https://goreportcard.com/badge/senseyeio/duration)](https://goreportcard.com/report/senseyeio/duration) [![GoDoc](https://godoc.org/github.com/senseyeio/duration?status.svg)](https://godoc.org/github.com/senseyeio/duration)
-=======
-Parse ISO8601 duration strings, and use to shift dates/times.
+# Duration [![Build](https://travis-ci.org/senseyeio/duration.svg?branch=master)](https://travis-ci.org/senseyeio/duration) [![Coverage](https://coveralls.io/repos/github/senseyeio/duration/badge.svg?branch=master)](https://coveralls.io/github/senseyeio/duration?branch=master) [![Go Report Card](https://goreportcard.com/badge/senseyeio/duration)](https://goreportcard.com/report/senseyeio/duration) [![GoDoc](https://godoc.org/github.com/senseyeio/duration?status.svg)](https://godoc.org/github.com/senseyeio/duration)
 
-Basic Example
--------------
+This is a fork of the original `duration` package with added functionality to support shifting dates/times both forward and backward.
+
+## Basic Example
 
 ```go
 package main
@@ -19,8 +18,10 @@ func main() {
 	d, _ := iso8601.ParseISO8601("P1D")
 	today := time.Now()
 	tomorrow := d.Shift(today)
+	yesterday := d.Unshift(today)
 	fmt.Println(today.Format("Jan _2"))
 	fmt.Println(tomorrow.Format("Jan _2"))
+	fmt.Println(yesterday.Format("Jan _2"))
 }
 ```
 
@@ -82,3 +83,31 @@ Nov 2, 2006
 Dec 2, 2006
 Jan 2, 2007
 ```
+
+
+Additional Functionality
+---------------------------
+This fork includes an Unshift method that complements the Shift functionality. It returns a time.Time shifted back by the duration from the given start.
+
+```go
+// UnShift returns a time.Time, shifted back by the duration from the given start.
+//
+// NB: UnShift uses time.AddDate for years, months, weeks, and days, and so
+// shares its limitations. In particular, shifting back by months is not recommended
+// unless the start date is before the 28th of the month. Otherwise, dates will
+// roll over, e.g. Oct 1 - P1M = Aug 31.
+//
+// Week and Day values will be combined as W*7 + D.
+func (d Duration) Unshift(t time.Time) time.Time {
+	if d.Y != 0 || d.M != 0 || d.W != 0 || d.D != 0 {
+		days := d.W*7 + d.D
+		t = t.AddDate(-d.Y, -d.M, -days)
+	}
+	t = t.Add(-d.timeDuration())
+	return t
+}
+
+```
+
+This method allows for shifting dates and times backward, which can be useful in certain scenarios.
+
