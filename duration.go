@@ -38,11 +38,13 @@ func ParseISO8601(from string) (Duration, error) {
 		return d, errors.New("could not parse duration string")
 	}
 
+	sawField := false
 	for i, name := range pattern.SubexpNames() {
 		part := match[i]
 		if i == 0 || name == "" || part == "" {
 			continue
 		}
+		sawField = true
 
 		val, err := strconv.Atoi(part)
 		if err != nil {
@@ -66,6 +68,11 @@ func ParseISO8601(from string) (Duration, error) {
 		default:
 			return d, fmt.Errorf("unknown field %s", name)
 		}
+	}
+	if !sawField {
+		// "P" and "PT" match the pattern because every designator is optional.
+		// They are not a zero duration. "P0D" and "PT0S" still have a field.
+		return d, errors.New("could not parse duration string")
 	}
 
 	return d, nil

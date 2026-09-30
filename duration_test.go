@@ -91,6 +91,8 @@ func TestCanParse(t *testing.T) {
 		{"PT1M", duration.Duration{TM: 1}},
 		{"PT1S", duration.Duration{TS: 1}},
 		{"P10Y5M8DT5H10M6S", duration.Duration{Y: 10, M: 5, D: 8, TH: 5, TM: 10, TS: 6}},
+		{"P0D", duration.Duration{}},
+		{"PT0S", duration.Duration{}},
 	}
 
 	for k, c := range cases {
@@ -107,6 +109,8 @@ func TestCanParse(t *testing.T) {
 func TestCanRejectBadString(t *testing.T) {
 	cases := []string{
 		"",
+		"P",
+		"PT",
 		"PP1D",
 		"P1D2F",
 		"P2F",
